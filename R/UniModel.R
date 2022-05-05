@@ -1,7 +1,7 @@
 library(Rcpp)
 library(tidyverse)
 library(gplots)
-source("plotfunctions.R") 
+source("R/plotfunctions.R") 
 
 starttime=Sys.time()
 
@@ -48,7 +48,7 @@ params <- within(params, {
 })
 attach(params)
 set.seed(params$seed)
-sourceCpp('studentmodel_reactive2.cpp')
+sourceCpp('R/studentmodel_reactive2.cpp')
 
 nsim=10
 par(mar=c(5,5,1,1),mfrow=c(1,2))
