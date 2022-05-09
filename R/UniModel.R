@@ -28,13 +28,13 @@ params <- within(params, {
   f=0.75 #fraction asymptomatic
   mrate=0.038 #mortality rate
   backgroundrate = 1e-4 #background infection rate
-  waning = 0
+  waning = 1/365
   ve_inf = 0.5
   ve_trans = 0.1
-    
+  vaccineuptake = 0.7
   ## initial conditions, list within list
   init <- within(list(), {
-    S=Npop
+    S=floor(Npop*(1-0.7))
     E=rep(0,nages)
     E[sample(1:nages,10)]=1
     A=rep(0,nages)
@@ -42,8 +42,7 @@ params <- within(params, {
     I=rep(0,nages)
     I[sample(1:nages,10)]=1
     H=rep(0,nages)
-    R=rep(0,nages)
-    R[sample(1:nages,10)]=1
+    R=Npop - S
     P=rep(0,nages)
     D=rep(0,nages)
     Hinc=rep(0,nages)
