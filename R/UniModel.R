@@ -1,3 +1,6 @@
+
+
+
 library(Rcpp)
 library(tidyverse)
 library(gplots)
@@ -25,7 +28,10 @@ params <- within(params, {
   f=0.75 #fraction asymptomatic
   mrate=0.038 #mortality rate
   backgroundrate = 1e-4 #background infection rate
-  
+  waning = 0
+  ve_inf = 0.5
+  ve_trans = 0.1
+    
   ## initial conditions, list within list
   init <- within(list(), {
     S=Npop
@@ -43,7 +49,8 @@ params <- within(params, {
     Hinc=rep(0,nages)
     Q=rep(0,nages)
     QA=rep(0,nages)
-    N=S+E+A+I+H+R+P+Q+QA
+    EV=rep(0,nages)
+    N=S+E+A+I+H+R+P+Q+QA+EV
   })
 })
 attach(params)
