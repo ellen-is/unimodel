@@ -45,6 +45,7 @@ getasymp = function(result.rep,years)
                          (6*nages+2):((6+1)*nages+1), #P compartment
                          (8*nages+2):((8+1)*nages+1), #Q compartment
                          (9*nages+2):((9+1)*nages+1), #QA compartment
+                         (11*nages+2):((11+1)*nages+1), #EV compartment
                          1,length(result.rep[1,]))] 
   
   allinf$total = rowSums(allinf[1:(length(allinf[1,])-2)])
@@ -53,13 +54,14 @@ getasymp = function(result.rep,years)
 }
 getallinf = function(result.rep,years)
 {
-  #the result.rep columns are time, S, E, A, I, R, H, P, D, Q, QA, N, nsim, scenario
+  #the result.rep columns are time, S, E, A, I, R, H, P, D, Q, QA, N, EV, nsim, scenario
   allinf = result.rep[,c((1*nages+2):((1+1)*nages+1), #E compartment
                          (2*nages+2):((2+1)*nages+1), #A compartment
                          (3*nages+2):((3+1)*nages+1), #I compartment
                          (6*nages+2):((6+1)*nages+1), #P compartment
                          (8*nages+2):((8+1)*nages+1), #Q compartment
                          (9*nages+2):((9+1)*nages+1), #QA compartment
+                         (11*nages+2):((11+1)*nages+1), #Ev compartment
                          1,length(result.rep[1,]))] #time and nsim
   allinf$total = rowSums(allinf[1:(length(allinf[1,])-2)])
   
@@ -127,7 +129,7 @@ plotcases = function(allinf,Infecteds,maxbaseline,stratname)
   #plot(startofterm+days,allinf$total[allinf$nsim==n]+Infecteds$total[Infecteds$nsim==n],type="l",lwd=1,col= "tan1",
       xlab="Date",cex.axis=1.1,cex.lab=1.3,
        #ylim=c(1,1.0*maxbaseline)log="")
-       ylab = "Number of infected students", ylim=c(1,2500),log="")
+       ylab = "Number of infected students", ylim=c(1,15000),log="")
        
   
   for(n in 1:nsim)

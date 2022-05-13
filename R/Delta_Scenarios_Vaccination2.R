@@ -40,7 +40,10 @@ infected <- c(rep(0.01,16))
 #Medium- 10%
 #High- 20%
 #natural_immunity <- c(rep(c(rep(0.05,3),rep(0.1,3), rep(0.2,3)),3))
-natural_immunity <- c(rep(rep(0.1,length(vaccine_uptake_list)),1))
+ #natural_immunity <- c(rep(rep(0.1,length(vaccine_uptake_list)),1))
+#right now natural immunity is the same as vaccination
+
+natural_immunity <- c(rep(rep(c(0.3, 0.5, 0.7, 0.9), 4),1))
 #natural_immunity <- c(rep(0.05,9), rep(0.1,9), rep(0.2,9))
 #natural_immunity_reinfection <- 0.97 #this was a parameter that was used to assume the reinfection rate for those who have natural immunity
 #natural_immunity_reinfection <- 0.97 #if 1 then it's not having an impact
@@ -63,6 +66,7 @@ Cumulative_incidence_total <- data.frame()
 #Recoverds_total <- data.frame()
 #Isolated_total <- data.frame()
 #this is the start of a for loop which can be used to do sensitivity analysis with the different parameter sets
+
 for (i in 1:length(vaccine_uptake_list)) {
   
   
@@ -83,18 +87,22 @@ for (i in 1:length(vaccine_uptake_list)) {
     #*(1-(uptake of vaccine*(1-efficacy of vaccine in reducing transmission))
     #*
     
-     vaccine_uptake <- vaccine_uptake_list[i]
+     vaccineuptake <- vaccine_uptake_list[i]
+    
+    # vaccine_uptake <- vaccine_uptake_list[i]
     # vaccine_transmission <- 0.45
     # vaccine_susceptibility <- 0.8  #Warwick estimates for alpha or delta
     # v_s <- 1-vaccine_susceptibility
     # v_t <- 1-vaccine_transmission
     ve_inf <- 0.45
-    ve_trans <- 0.8
+    ve_trans <- 0.8 #proportion reduction in the probability of symptoms.
     
     
     #beta=(betamat/(iperiod+1/gam_p))*(1-(vaccine_uptake*vaccine_transmission*vaccine_susceptibility))
     #beta= ((betamat/(iperiod+1/gam_p))*(v_s*v_t*(vaccine_uptake^2)+ vaccine_uptake*(1-vaccine_uptake)*(v_s+v_t) + ((1-vaccine_uptake)^2)))*1.5*1.6
-    beta=betamat/(iperiod+1/gam_p)
+   
+    #Delta
+    beta=(betamat/(iperiod+1/gam_p))*1.5*1.6
     
     #beta=(betamat/(iperiod+1/gam_p))*(1-(vaccine_uptake*(1-vaccine_transmission)))*(1-(vaccine_uptake*(1-vaccine_susceptibility)))
     #beta=betamat/(iperiod+1/gam_p)
@@ -116,7 +124,10 @@ for (i in 1:length(vaccine_uptake_list)) {
     h = 0 #hospitalisation switched off
     vaccine_symptoms <- 0.84 #2nd dose pfzier 84-95% 
     #f=0.75/(1+vaccine_uptake*vaccine_symptoms) #((0.25 * vaccine_symptoms)*vaccine_uptake) #fraction asymptomatic - increase this because of vaccination
-    f = 0.75*(1-vaccine_uptake) + 0.75*vaccine_uptake/vaccine_symptoms
+    
+    f = 0.75*(1-vaccineuptake) + 0.75*vaccineuptake/ve_trans
+    
+    #f = 0.75*(1-vaccine_uptake) + 0.75*vaccine_uptake/vaccine_symptoms
     #mrate=0.038 * 0.11 #mortality rate adjusted according to vaccine efficacy
     mrate = 0 #mortality rate swtiched off
     backgroundrate = backgroundrate_list[i] #background infection rate
@@ -215,7 +226,7 @@ for (i in 1:length(vaccine_uptake_list)) {
   })
   #attach(params)
   set.seed(params$seed)
-  sourceCpp('R/studentmodel_reactive2_Emily9May22.cpp')
+  sourceCpp('R/studentmodel_reactive3_Emily9May22.cpp')
   
   nsim=100
   
