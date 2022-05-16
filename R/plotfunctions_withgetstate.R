@@ -130,7 +130,7 @@ plotcases = function(allinf,Infecteds,maxbaseline,stratname)
       xlab="Date",cex.axis=1.1,cex.lab=1.3,
       #main = paste("a =", a_test_uptake_list[i], "v=", vaccine_uptake_list[i]),
        #ylim=c(1,1.0*maxbaseline)log="")
-       ylab = "Number of infected students", ylim=c(1,15000),log="")
+       ylab = "Number of infected students", ylim=c(1,12000),log="")
        
   
   for(n in 1:nsim)

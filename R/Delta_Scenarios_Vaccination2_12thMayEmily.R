@@ -18,8 +18,18 @@ nages=length(Npop)
 
 vaccine_uptake_list <- c(rep(rep(c(0.3, 0.5, 0.7, 0.9), 4),1))
 
+#Proportion of people who have protection from natural infection and are not vaccinated
+
 #Asymptomatic testing uptake 
 a_test_uptake_list <-  c((rep(c(rep(0.9,4),rep(0.5,4),rep(0.2,4), rep(0,4)),1)))
+
+#Range of student population with natural immunity
+#Low- 5%
+#Medium- 10%
+#High- 20%
+#natural_immunity <- c(rep(c(rep(0.05,3),rep(0.1,3), rep(0.2,3)),3))
+natural_immunity <- c(rep(rep(0.2,length(vaccine_uptake_list)),1))
+
 
 
 #Range of percentage of student population initially infected
@@ -74,8 +84,8 @@ for (i in 1:length(vaccine_uptake_list)) {
      nages=length(Npop)
     
     gam_p=1/2;
-    vaccineuptake <-1 #vaccine_uptake_list[i]
-    a_test_uptake <- 0 #a_test_uptake_list[i]
+    vaccineuptake <-vaccine_uptake_list[i]
+    a_test_uptake <- a_test_uptake_list[i]
     ve_inf <- 0.45  #vaccine effectiveness against infection
     #ve_trans <- 0.4 #proportion reduction in the probability of symptoms.
     ve_trans <- 0.16 #proportion reduction in the probability of symptoms.
@@ -88,7 +98,7 @@ for (i in 1:length(vaccine_uptake_list)) {
     eps=0.5; eps_q=0.5 ##
     h = 0 #hospitalisation switched off
     
-    #I think f is already being scaled in the c code so I have commented out the ways this was done in the vaccination paper and left it as it was in the original paper
+    #f is already being scaled in the c code according to ve_trans so I have commented out the ways this was done in the vaccination paper and left it as it was in the original paper
     f = 0.75
     #vaccine_symptoms <- 0.84 #2nd dose pfzier 84-95% We had this in the 
     #f=0.75/(1+vaccine_uptake*vaccine_symptoms) #((0.25 * vaccine_symptoms)*vaccine_uptake) #fraction asymptomatic - increase this because of vaccination
@@ -139,16 +149,21 @@ for (i in 1:length(vaccine_uptake_list)) {
       H=rep(0,nages)
       R=rep(0,nages)
       
-      #this is adjusted based on the vaccine uptake and divided evenly between groups
-        if(vaccineuptake*N <= 153) {
+      #this is adjusted based on the vaccine uptake and individuals with natural immunity who aren't vaccinated and divided evenly between groups
+      #The proportion of the population who are vaccinated + the proportion of the population who have natural immunity and are not vaccinated
+      print(round((vaccineuptake*N)+((natural_immunity[i]*(1-vaccineuptake))*N)))
+        if((vaccineuptake*N)+((natural_immunity[i]*(1-vaccineuptake))*N) <= 153) {
           
-      R[sample(1:nages,round(vaccineuptake*N))]=1 
+      R[sample(1:nages,round((vaccineuptake*N)+((natural_immunity[i]*(1-vaccineuptake))*N)))]=1 
       
       
       } else {
-       R[sample(1:nages,153)]=round(vaccineuptake*N/153)
+        print(paste("else", round(((vaccineuptake*N)+((natural_immunity[i]*(1-vaccineuptake))*N))/153)))
+       R[sample(1:nages,153)]=round(((vaccineuptake*N)+((natural_immunity[i]*(1-vaccineuptake))*N))/153)
        
       }
+      
+      
       
       Q=rep(0,nages)
       D=rep(0,nages)
@@ -176,7 +191,7 @@ for (i in 1:length(vaccine_uptake_list)) {
       N <- S+E+A+I+P+H+R+Q+D+Hinc+QA+EV
       
       #For counting N in each scenario
-      #Ntot <<- data.frame(scenario = paste(infected[i], a_test_uptake_list[i], vaccine_uptake_list[i]), Ntot = N)
+      #Ntot <<- data.frame(scenario = paste(infected[i], a_test_uptake_list[i], vaccine_uptake_list[i]), Rounded = round((vaccineuptake*N)+((natural_immunity[i]*(1-vaccineuptake))*N)), Raw = (vaccineuptake*N)+((natural_immunity[i]*(1-vaccineuptake))*N))
       
     })
   })
