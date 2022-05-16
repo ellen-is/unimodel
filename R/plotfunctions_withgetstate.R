@@ -128,6 +128,7 @@ plotcases = function(allinf,Infecteds,maxbaseline,stratname)
   plot(startofterm+days,allinf$total[allinf$nsim==n],type="l",lwd=2,col=rgb(0,0.5,0,0.1),
   #plot(startofterm+days,allinf$total[allinf$nsim==n]+Infecteds$total[Infecteds$nsim==n],type="l",lwd=1,col= "tan1",
       xlab="Date",cex.axis=1.1,cex.lab=1.3,
+      #main = paste("a =", a_test_uptake_list[i], "v=", vaccine_uptake_list[i]),
        #ylim=c(1,1.0*maxbaseline)log="")
        ylab = "Number of infected students", ylim=c(1,15000),log="")
        

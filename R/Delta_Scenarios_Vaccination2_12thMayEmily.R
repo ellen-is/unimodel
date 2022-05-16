@@ -15,10 +15,12 @@ nages=length(Npop)
 #The way I've made the lists makes sure there are all combinations of the three parameter sets
 
 #Vaccine uptake informs the proportion of students who are in the R compartment at the beginning of the simulation
+
 vaccine_uptake_list <- c(rep(rep(c(0.3, 0.5, 0.7, 0.9), 4),1))
 
 #Asymptomatic testing uptake 
 a_test_uptake_list <-  c((rep(c(rep(0.9,4),rep(0.5,4),rep(0.2,4), rep(0,4)),1)))
+
 
 #Range of percentage of student population initially infected
 #Low- 0.05%
@@ -26,7 +28,11 @@ a_test_uptake_list <-  c((rep(c(rep(0.9,4),rep(0.5,4),rep(0.2,4), rep(0,4)),1)))
 #High- 0.2% 
 #infected <- c(rep(0.005,16), rep(0.01,16), rep(0.02,16))
 #Used the average for the paper results
+
 infected <- c(rep(0.01,16))
+
+
+
 
 ############################################################################
 ###Code currently commented out but can be used to save data to make other figures ##
@@ -49,7 +55,10 @@ infected <- c(rep(0.01,16))
 ############################################################################################
 
 #Setting layout for figure
+
 par(mar=c(2, 3, 2, 2),mfrow=c(4,4))
+
+
 
 for (i in 1:length(vaccine_uptake_list)) {
   
@@ -65,10 +74,11 @@ for (i in 1:length(vaccine_uptake_list)) {
      nages=length(Npop)
     
     gam_p=1/2;
-    vaccineuptake <- vaccine_uptake_list[i]
-    a_test_uptake <- a_test_uptake_list[i]
+    vaccineuptake <-1 #vaccine_uptake_list[i]
+    a_test_uptake <- 0 #a_test_uptake_list[i]
     ve_inf <- 0.45  #vaccine effectiveness against infection
-    ve_trans <- 0.4 #proportion reduction in the probability of symptoms.
+    #ve_trans <- 0.4 #proportion reduction in the probability of symptoms.
+    ve_trans <- 0.16 #proportion reduction in the probability of symptoms.
     beta=(betamat/(iperiod+1/gam_p))*1.5*1.6 #Setting this for delta, hence multiplying by 1.5 and 1.6 (the increase in transmisbility from WT to alpha and then alpha to delta respectively)
     gamma=1/iperiod;  sigma=1/(3.2);  gam_a=1/(iperiod+1/gam_p); gam_h=1/3; gam_q=1/10 ##recovery rates, not we are now assuming 10 days are spent in isolation (this is what we assumed in the vaccination paper but we assumed 14 in the original paper)
     daysto_asy_test <- 1/4
@@ -174,7 +184,7 @@ for (i in 1:length(vaccine_uptake_list)) {
   set.seed(params$seed)
   sourceCpp('R/studentmodel_reactive3_Emily9May22.cpp')
   
-  nsim=91
+  nsim=100
   
   result.rep=c()
   for(nn in 1:nsim)
