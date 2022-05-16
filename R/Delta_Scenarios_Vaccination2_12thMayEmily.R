@@ -74,8 +74,8 @@ for (i in 1:length(vaccine_uptake_list)) {
      nages=length(Npop)
     
     gam_p=1/2;
-    vaccineuptake <-1 #vaccine_uptake_list[i]
-    a_test_uptake <- 0 #a_test_uptake_list[i]
+    vaccineuptake <-vaccine_uptake_list[i]
+    a_test_uptake <- a_test_uptake_list[i]
     ve_inf <- 0.45  #vaccine effectiveness against infection
     #ve_trans <- 0.4 #proportion reduction in the probability of symptoms.
     ve_trans <- 0.16 #proportion reduction in the probability of symptoms.
